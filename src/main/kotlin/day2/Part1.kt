@@ -6,6 +6,7 @@ import kotlin.math.sign
 fun main() {
     println(Part1.calc(testData))
     println(Part1.calc(data))
+    println(Part1a.calc(data))
 }
 
 object Part1 {
@@ -24,4 +25,10 @@ object Part1 {
         val validDirection = windowed(2) { (it[0] - it[1]).sign }.toSet().size == 1
         return validGap && validDirection
     }
+}
+
+object Part1a {
+    fun calc(input: List<String>): Int = input.map{it.split(" ").map{it.toInt()}}
+        .count{it.windowed(2){abs(it[0]-it[1])}.all{it<=3}&&
+               it.windowed(2){(it[0]-it[1]).sign}.toSet().size==1}
 }
