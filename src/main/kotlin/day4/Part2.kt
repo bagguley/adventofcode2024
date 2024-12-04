@@ -3,6 +3,7 @@ package day4
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
+    println(Part2a.calc(data))
 }
 
 object Part2 {
@@ -22,4 +23,13 @@ object Part2 {
     private fun List<String>.extract(point: Pair<Int,Int>, steps: List<Pair<Int, Int>>): String =
         steps.map { s -> getOrNull(point.second + s.second)?.getOrNull(point.first + s.first) ?: "" }
             .joinToString("")
+}
+
+object Part2a {
+    fun calc(input:List<String>): Int = input.flatMapIndexed { y, s -> s.mapIndexed { x, c -> x to c }
+        .filter { it.second == 'A' }.map { it.first to y } }
+        .count { p -> listOf(-1 to -1, 0 to 0, 1 to 1).map { s -> input.getOrNull(p.second + s.second)
+            ?.getOrNull(p.first + s.first) ?: "" }.joinToString("").let{ it == "MAS" || it == "SAM" } &&
+                listOf(1 to -1, 0 to 0, -1 to 1).map { s -> input.getOrNull(p.second + s.second)
+                    ?.getOrNull(p.first + s.first) ?: "" }.joinToString("").let{ it == "MAS" || it == "SAM" } }
 }
