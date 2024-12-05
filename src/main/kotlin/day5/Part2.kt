@@ -6,7 +6,7 @@ fun main() {
 }
 
 object Part2 {
-    fun calc(input: List<String>):Int {
+    fun calc(input: List<String>): Int {
         val rules = input[0].split("\n").groupBy({ it.split("|")[0] }) { it.substringAfter("|") }
         val incorrect = input[1].split("\n").map { it.split(",") }.filter { !isValid(rules, it) }
 
@@ -17,7 +17,7 @@ object Part2 {
         return sorted.sumOf { it[it.size/2].toInt() }
     }
 
-    private fun isValid(rules: Map<String, List<String>>, update: List<String>) : Boolean =
+    private fun isValid(rules: Map<String, List<String>>, update: List<String>): Boolean =
         update.map { s -> update.dropWhile { it != s } }.dropLast(1)
             .all { l -> l.drop(1).all { rules[l.first()]?.contains(it) == true } }
 }
