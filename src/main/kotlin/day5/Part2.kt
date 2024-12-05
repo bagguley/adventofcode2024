@@ -8,28 +8,16 @@ fun main() {
 object Part2 {
     fun calc(input: List<String>):Int {
         val rules = input[0].split("\n").groupBy({ it.split("|")[0] }) { it.substringAfter("|") }
-        val updates = input[1].split("\n").map { it.split(",") }
-        val incorrect = updates.filter { !isValid(rules, it) }
+        val incorrect = input[1].split("\n").map { it.split(",") }.filter { !isValid(rules, it) }
 
-        val sorted = incorrect.map {
-            val comparator = fun(a: String, b: String): Int {
-                if (rules[a]?.contains(b) == true) return -1
-                if (rules[b]?.contains(a) == true) return 1
-                return 0
-            }
-            it.sortedWith(comparator)
-        }
+        val sorted = incorrect.map { it.sortedWith { a, b ->
+                if (rules[a]?.contains(b) == true) 1
+                else if (rules[b]?.contains(a) == true) -1 else 0 } }
 
         return sorted.sumOf { it[it.size/2].toInt() }
     }
 
-    private fun isValid(rules: Map<String, List<String>>, update: List<String>) : Boolean {
-        val list = update.toMutableList()
-
-        while (list.isNotEmpty()) {
-            val head = list.removeFirst()
-            if (list.any { rules[it]?.contains(head) == true }) return false
-        }
-        return true
-    }
+    private fun isValid(rules: Map<String, List<String>>, update: List<String>) : Boolean =
+        update.map { s -> update.dropWhile { it != s } }.dropLast(1)
+            .all { l -> l.drop(1).all { rules[l.first()]?.contains(it) == true } }
 }
