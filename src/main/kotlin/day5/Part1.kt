@@ -3,6 +3,7 @@ package day5
 fun main() {
     println(Part1.calc(testData))
     println(Part1.calc(data))
+    println(Part1a.calc(data))
 }
 
 object Part1 {
