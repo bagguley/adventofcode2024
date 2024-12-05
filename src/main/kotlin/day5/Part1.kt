@@ -4,6 +4,7 @@ fun main() {
     println(Part1.calc(testData))
     println(Part1.calc(data))
     println(Part1a.calc(data))
+    println(Part1b.calc(data))
 }
 
 object Part1 {
@@ -24,3 +25,11 @@ object Part1a {
             .all { l -> l.drop(1).all { input[0].split("\n").groupBy({ it.split("|")[0] })
             { it.substringAfter("|") }[l.first()]?.contains(it) == true } } }.sumOf { it[it.size/2].toInt() }
 }
+
+object Part1b {
+    fun calc(input: List<String>): Int =
+        (input[0].split("\n").groupBy({ it.split("|")[0] }) { it.substringAfter("|") } to
+         input[1].split("\n").map { it.split(",") }).let { p -> p.second.filter {
+             it.map { s -> it.dropWhile { it != s } }.dropLast(1)
+                 .all { l -> l.drop(1).all { p.first[l.first()]?.contains(it) == true } } } }
+            .sumOf { it[it.size / 2].toInt() } }
