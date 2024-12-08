@@ -4,6 +4,7 @@ fun main() {
     println(Part1.calc(testData))
     println(Part1.calc(data))
     println(Part1a.calc(data))
+    println(Part1b.calc(data))
 }
 
 object Part1 {
@@ -33,16 +34,25 @@ object Part1 {
 }
 
 object Part1a {
-    fun calc(input: List<String>): Int {
-        val position = input.flatMapIndexed { y, s -> s.mapIndexed { x, c -> x to c }.filter { it.second == '^' }.map { it.first to y } }.first()
-        return move(position, 0 to -1, input, setOf(position))
-    }
+    fun calc(input: List<String>): Int =
+        input.flatMapIndexed { y, s -> s.mapIndexed { x, c -> x to c }.filter { it.second == '^' }
+            .map { it.first to y } }.first().let { move(it, 0 to -1, input, setOf(it)) }
 
-    private tailrec fun move(position: Pair<Int,Int>, direction: Pair<Int,Int>, input: List<String>, visited: Set<Pair<Int,Int>>): Int {
-        val next = input.getOrNull(position.second + direction.second)?.getOrNull(position.first + direction.first) ?: 'X'
-        if (next == 'X') return visited.size
-        if (next != '#') return move(position.first + direction.first to position.second + direction.second, direction,
-            input, visited + (position.first + direction.first to position.second + direction.second))
-        return move(position, -direction.second to direction.first, input, visited)
-    }
+    private tailrec fun move(pos: Pair<Int,Int>, dir: Pair<Int,Int>, input: List<String>, been: Set<Pair<Int,Int>>): Int =
+        (input.getOrNull(pos.second + dir.second)?.getOrNull(pos.first + dir.first) ?: 'X').let {
+            return if (it == 'X') been.size else if (it != '#') move(pos.first + dir.first to pos.second + dir.second, dir,
+            input, been + (pos.first + dir.first to pos.second + dir.second)) else move(pos, -dir.second to dir.first, input, been)}
+}
+
+object Part1b {
+    fun calc(input: List<String>): Int =
+        input.flatMapIndexed { y, s -> s.mapIndexed { x, c -> x to c }.filter { it.second == '^' }
+            .map { it.first to y } }.first().let { move(it, 0 to -1, input, setOf(it)) }
+
+    private tailrec fun move(pos: Pair<Int,Int>, dir: Pair<Int,Int>, input: List<String>,
+                             been: Set<Pair<Int,Int>>): Int =
+        (input.getOrNull(pos.second + dir.second)?.getOrNull(pos.first + dir.first) ?: 'X').let {
+            return if (it == 'X') been.size else if (it != '#') move(pos.first + dir.first to
+                    pos.second + dir.second, dir, input, been + (pos.first + dir.first to
+                    pos.second + dir.second)) else move(pos, -dir.second to dir.first, input, been)}
 }
