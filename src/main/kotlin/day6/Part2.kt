@@ -3,6 +3,7 @@ package day6
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
+    println(Part2a.calc(data))
 }
 
 object Part2 {
@@ -36,5 +37,29 @@ object Part2 {
         }
 
         return true
+    }
+}
+
+object Part2a {
+    fun calc(input: List<String>): Int = with(input.flatMapIndexed{y,s->s.mapIndexed{x,c->x to c}.filter{it.second=='^'}
+        .map{it.first to y}}.first()){input.flatMapIndexed{y,s->s.mapIndexed{x,c->x to c}.filter{it.second=='.'}
+        .map{it.first to y}}.map{d->input.toMutableList().apply{this[d.second]=StringBuilder(this[d.second])
+        .also{it.setCharAt(d.first,'#')}.toString()}}.count{!doesExit(it,this)}}
+
+
+    private fun doesExit(input: List<String>, start: Pair<Int,Int>): Boolean {
+        val visited: MutableSet<Pair<Pair<Int,Int>,Pair<Int,Int>>> = mutableSetOf(start to (0 to -1))
+        var pos = start
+        var dir = 0 to -1
+
+        while (true) {
+            when (input.getOrNull(pos.second + dir.second)?.getOrNull(pos.first + dir.first) ?: 'X') {
+                '.', '^' -> { pos = pos.first + dir.first to pos.second + dir.second
+                    if (pos to dir in visited) return false
+                    visited.add(pos to dir) }
+                '#' -> dir = -dir.second to dir.first
+                else -> return true
+            }
+        }
     }
 }
