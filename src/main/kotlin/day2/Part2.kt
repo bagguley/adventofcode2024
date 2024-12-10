@@ -9,6 +9,7 @@ fun main() {
     println(Part2a.calc(data))
     println(Part2b.calc(data))
     println(Part2c.calc(data))
+    println(Part2d.calc(data))
 }
 
 object Part2 {
@@ -61,4 +62,10 @@ object Part2c {
         return input.map{it.split(" ").map{it.toInt()}}.count{it.isSafe()||
                 it.indices.map{r->it.filterIndexed{index,_->index!=r}}.any{it.isSafe()}}
     }
+}
+
+object Part2d {
+    fun calc(input: List<String>): Int = input.map{it.split(" ").map{it.toInt()}}.count{it.windowed(2){abs(it[0]-it[1])}
+        .all{it<=3}&&it.windowed(2){(it[0]-it[1]).sign}.toSet().size==1||it.indices.map{r->it.filterIndexed{index,_->index!=r}}
+            .any{it.windowed(2){abs(it[0]-it[1])}.all{it<=3}&&it.windowed(2){(it[0]-it[1]).sign}.toSet().size==1}}
 }
