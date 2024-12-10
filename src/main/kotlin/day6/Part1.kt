@@ -1,10 +1,13 @@
 package day6
 
+import util.*
+
 fun main() {
     println(Part1.calc(testData))
     println(Part1.calc(data))
     println(Part1a.calc(data))
     println(Part1b.calc(data))
+    println(Part1UsingUtil.calc(data))
 }
 
 object Part1 {
@@ -56,3 +59,29 @@ object Part1b {
                     pos.second + dir.second, dir, input, been + (pos.first + dir.first to
                     pos.second + dir.second)) else move(pos, -dir.second to dir.first, input, been)}
 }
+
+object Part1UsingUtil {
+    fun calc(input: List<String>): Int {
+        var position = input.findChar('^').first()
+        var direction = Direction.NORTH
+        val visited: MutableSet<Vec2> = mutableSetOf(position)
+
+        var current = '^'
+
+        while (current != 'X') {
+            when (val next = input.getOr(position + direction, 'X')) {
+                '.', '^' -> {
+                    position += direction
+                    visited.add(position)
+                    current = next
+                }
+                '#' -> direction = direction.clockwise90()
+                else -> current = 'X'
+            }
+        }
+
+        return visited.size
+    }
+}
+
+

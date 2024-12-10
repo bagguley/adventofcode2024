@@ -1,9 +1,12 @@
 package day6
 
+import util.*
+
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
     println(Part2a.calc(data))
+    println(Part2UsingUtil.calc(data))
 }
 
 object Part2 {
@@ -61,5 +64,37 @@ object Part2a {
                 else -> return true
             }
         }
+    }
+}
+
+object Part2UsingUtil {
+    fun calc(input: List<String>): Int {
+        val start = input.findChar('^').first()
+        val dots = input.findChar('.')
+
+        return dots.map { d -> input.setAt(d, '#') }.count { !doesExit(it, start) }
+    }
+
+    private fun doesExit(input: List<String>, start: Vec2): Boolean {
+        var direction = Direction.NORTH
+        val visited = mutableSetOf(start to direction)
+
+        var position = start
+        var current = '^'
+
+        while (current != 'X') {
+            when (val next = input.getOr(position + direction, 'X')) {
+                '.', '^' -> {
+                    position += direction
+                    if (position to direction in visited) return false
+                    visited.add(position to direction)
+                    current = next
+                }
+                '#' -> direction = direction.clockwise90()
+                else -> current = 'X'
+            }
+        }
+
+        return true
     }
 }
