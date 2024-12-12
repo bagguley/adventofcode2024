@@ -3,6 +3,7 @@ package day11
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
+    println(Part2a.calc(data))
 }
 
 object Part2 {
@@ -25,4 +26,13 @@ object Part2 {
 
         return result.groupBy{ it }.map { it.key to it.value.size.toLong() * entry.value }
     }
+}
+
+object Part2a {
+    fun calc(input: String): Long =
+        (1..75).fold(input.split(" ").groupBy{ it }.map { it.key to it.value.size.toLong() }.associate { it.first to it.second }) { stack, _ ->
+            stack.flatMap { e-> (if (e.key == "0") listOf("1") else if (e.key.length and 1 == 0) listOf(e.key.dropLast(e.key.length / 2),
+                e.key.drop(e.key.length / 2).toLong().toString()) else listOf((e.key.toLong() * 2024).toString())).groupBy{ it }.map {
+                    it.key to it.value.size.toLong() * e.value }}.groupBy { it.first }.map { it.key to it.value.sumOf { it.second } }
+                .associate { it.first to it.second } }.values.reduce { acc, l -> acc + l }
 }
