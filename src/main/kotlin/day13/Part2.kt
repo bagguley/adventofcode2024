@@ -1,10 +1,13 @@
 package day13
 
+import util.*
+import util.SimultaneousBuilder.*
 import java.math.BigInteger
 
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
+    println(Part2UsingUtil.calc(data))
 }
 
 object Part2 {
@@ -42,6 +45,46 @@ object Part2 {
                 val a  = topa.div(suba)
                 return  (3.toBigInteger() * a) + b
             }
+        }
+
+        return BigInteger.ZERO
+    }
+
+    data class Game(val buttonA: Button, val buttonB: Button, val prize: Prize)
+
+    data class Button(val x: BigInteger, val y: BigInteger)
+
+    data class Prize(val x: BigInteger, val y: BigInteger)
+}
+
+object Part2UsingUtil {
+    fun calc(input: List<String>): BigInteger {
+        val games = load(input)
+
+        return games.sumOf { numTokensToWin(it) }
+    }
+
+    private fun load(input: List<String>): List<Game> {
+        return input.map {
+            val (_, ax, ay) = "Button A: X\\+(\\d+), Y\\+(\\d+)".toRegex().find(it)!!.groupValues
+            val (_, bx, by) = "Button B: X\\+(\\d+), Y\\+(\\d+)".toRegex().find(it)!!.groupValues
+            val (_, px, py)  = "Prize: X=(\\d+), Y=(\\d+)".toRegex().find(it)!!.groupValues
+
+            Game(Button(ax.toBigInteger(), ay.toBigInteger()), Button(bx.toBigInteger(), by.toBigInteger()),
+                Prize(px.toBigInteger(), py.toBigInteger()))
+        }
+    }
+
+    private fun numTokensToWin(game: Game): BigInteger {
+        val offset = 10_000_000_000_000L.toBigInteger()
+
+        val simResult = solveSimultaneous {
+            A * game.buttonA.x + B * game.buttonB.x eq game.prize.x + offset
+            A * game.buttonA.y + B * game.buttonB.y eq game.prize.y + offset
+        }
+
+        if (simResult.first.remainder == BigInteger.ZERO && simResult.second.remainder == BigInteger.ZERO) {
+            return 3.toBigInteger() * simResult.first.quotient + simResult.second.quotient
         }
 
         return BigInteger.ZERO
