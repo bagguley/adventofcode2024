@@ -37,6 +37,7 @@ operator fun Vec2.plus(direction: Direction): Vec2 = Vec2(this.x + direction.x, 
 operator fun Vec2.plus(other: Vec2): Vec2 = Vec2(this.x + other.x, this.y + other.y)
 operator fun Vec2.minus(direction: Direction): Vec2 = Vec2(this.x - direction.x, this.y - direction.y)
 operator fun Vec2.minus(other: Vec2): Vec2 = Vec2(this.x - other.x, this.y - other.y)
+operator fun Vec2.times(times: Int): Vec2 = Vec2(this.x * times, this.y * times)
 
 operator fun Direction.plus(vector: Vec2): Vec2 = Vec2(this.x + vector.x, this.y + vector.y)
 operator fun Direction.plus(other: Direction): Vec2 = Vec2(this.x + other.x, this.y + other.y)
