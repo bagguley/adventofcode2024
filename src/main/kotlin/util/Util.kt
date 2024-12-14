@@ -17,6 +17,16 @@ fun List<String>.setAt(position: Vec2, char: Char) =
 fun <T> List<String>.toVec2Map(transform: (Char) -> T): Map<Vec2, T> =
     this.flatMapIndexed { y, l -> l.mapIndexed { x, c -> Vec2(x, y) to (transform(c)) } }.associate { it }
 
+fun List<String>.print() {
+    for (y in indices) {
+        val row = get(y)
+        for (x in row.indices) {
+            print(get(y)[x])
+        }
+        println()
+    }
+}
+
 enum class Direction(val x: Int, val y: Int) {
     NORTH(0, -1), EAST(1, 0), SOUTH(0, 1), WEST(-1, 0);
 
@@ -43,6 +53,7 @@ operator fun Direction.plus(vector: Vec2): Vec2 = Vec2(this.x + vector.x, this.y
 operator fun Direction.plus(other: Direction): Vec2 = Vec2(this.x + other.x, this.y + other.y)
 operator fun Direction.minus(vector: Vec2): Vec2 = Vec2(this.x - vector.x, this.y - vector.y)
 operator fun Direction.minus(other: Direction): Vec2 = Vec2(this.x - other.x, this.y - other.y)
+operator fun Direction.times(times: Int): Vec2 = Vec2(this.x * times, this.y * times)
 
 class Counter {
     private var value = 0
