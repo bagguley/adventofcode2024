@@ -7,6 +7,7 @@ fun main() {
     println(Part1.calc(data))
     println(Part1a.calc(data))
     println(Part1b.calc(data))
+    println(Part1c.calc(data))
     println(Part1UsingUtil.calc(data))
 }
 
@@ -59,6 +60,20 @@ object Part1b {
                     pos.second + dir.second, dir, input, been + (pos.first + dir.first to
                     pos.second + dir.second)) else move(pos, -dir.second to dir.first, input, been)}
 }
+
+object Part1c {
+    fun calc(input: List<String>): Int = input.flatMapIndexed { y, s -> s.mapIndexed { x, c -> x to c }.filter { it.second == '^' }
+        .map { it.first to y } }.first().let { map ->
+            DeepRecursiveFunction<Pair<Triple<Pair<Int,Int>, Pair<Int,Int>, List<String>>, Set<Pair<Int,Int>>>, Int> { param ->
+                (input.getOrNull(param.first.first.second + param.first.second.second)?.getOrNull(param.first.first.first + param.first.second.first) ?: 'X').let {
+                    if (it == 'X') param.second.size else if (it != '#') callRecursive(Triple(param.first.first.first + param.first.second.first to
+                            param.first.first.second + param.first.second.second, param.first.second, input) to param.second + (param.first.first.first + param.first.second.first to
+                            param.first.first.second + param.first.second.second)) else callRecursive(Triple(param.first.first, -param.first.second.second to param.first.second.first, input) to param.second)
+                }
+            }.invoke(Triple(map, 0 to -1, input) to setOf(map))
+        }
+}
+
 
 object Part1UsingUtil {
     fun calc(input: List<String>): Int {
