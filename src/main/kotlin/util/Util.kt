@@ -36,7 +36,15 @@ enum class Direction(val x: Int, val y: Int) {
             EAST -> SOUTH
             SOUTH -> WEST
             WEST -> NORTH
-    }
+        }
+
+    fun anticlockwise90(): Direction =
+        when (this) {
+            NORTH -> WEST
+            EAST -> NORTH
+            SOUTH -> EAST
+            WEST -> SOUTH
+        }
 
     companion object {
         val ALL = listOf(NORTH, EAST, SOUTH, WEST)
