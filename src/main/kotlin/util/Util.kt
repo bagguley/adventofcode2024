@@ -1,6 +1,8 @@
 package util
 
 import java.math.BigInteger
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 data class Vec2(val x: Int, val y: Int)
 
@@ -128,3 +130,32 @@ class SimultaneousBuilder {
 }
 
 data class SimultaneousResult(val quotient: BigInteger, val remainder: BigInteger)
+
+class BoundedMap<T>(private val width: Int, private val height: Int, private val wall: T): LinkedHashMap<Vec2, T>() {
+    override fun get(key: Vec2): T? {
+        if (key.x !in 0..< width || key.y !in 0..< height) return wall
+        return super.get(key)
+    }
+
+    override fun getOrDefault(key: Vec2, defaultValue: T): T = if (get(key) == null) defaultValue else get(key)!!
+
+    fun findPath(start: Vec2, end: Vec2, next: (Path) -> List<Path>): Int? {
+        val seen = mutableMapOf(start to 0)
+        val queue = PriorityQueue<Path>().apply { add(Path(start, 0)) }
+
+        while (queue.isNotEmpty()) {
+            val path = queue.remove()
+            next(path).filter { get(it.position) != wall }.filter { !seen.containsKey(it.position) }.forEach {
+                queue.add(it)
+                seen[it.position] = it.cost
+            }
+            if (seen[end] != null) return seen[end]!!
+        }
+
+        return null
+    }
+}
+
+data class Path(val position: Vec2, val cost: Int): Comparable<Path> {
+    override fun compareTo(other: Path): Int = cost.compareTo(other.cost)
+}
