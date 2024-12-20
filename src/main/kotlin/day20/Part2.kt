@@ -21,8 +21,7 @@ object Part2 {
         val costFromEnd = map.findAllCost(end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
         val normalPath = map.findBestPath(start, end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
 
-        val allPairs = normalPath.flatMap { p -> (normalPath - p).map { n -> p to n } }
-            .filter { it.first.distanceTo(it.second) <= cheatLength }
+        val allPairs = normalPath.allPairs().filter { it.first.distanceTo(it.second) <= cheatLength }
             .filter { costFromEnd[it.first]!! > costFromEnd[it.second]!! }
 
         return allPairs.filter { costFromEnd[it.first]!! - (it.first.distanceTo(it.second)) >= costFromEnd[it.second]!! + saving }.size
