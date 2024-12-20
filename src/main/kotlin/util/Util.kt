@@ -3,6 +3,7 @@ package util
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.LinkedHashMap
+import kotlin.math.abs
 
 data class Vec2(val x: Int, val y: Int)
 
@@ -51,6 +52,10 @@ enum class Direction(val x: Int, val y: Int) {
     companion object {
         val ALL = listOf(NORTH, EAST, SOUTH, WEST)
     }
+}
+
+fun Vec2.distanceTo(other: Vec2): Int {
+    return abs(x - other.x) + abs(y - other.y)
 }
 
 operator fun Vec2.plus(direction: Direction): Vec2 = Vec2(this.x + direction.x, this.y + direction.y)
