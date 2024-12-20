@@ -23,10 +23,8 @@ object Part1 {
 
         val moves = Direction.ALL.map { it * 2 }
 
-        val res = normalPath.sumOf { p ->
+        return normalPath.sumOf { p ->
             moves.count { m -> normalPath.contains(p + m) && (costFromEnd[p]!! - 2 >= costFromEnd[p + m]!! + limit) }
         }
-
-        return res
     }
 }
