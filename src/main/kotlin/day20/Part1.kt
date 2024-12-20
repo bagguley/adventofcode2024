@@ -20,13 +20,12 @@ object Part1 {
 
         val costFromEnd = map.findAllCost(end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
         val normalPath = map.findBestPath(start, end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
-        val normalCost = normalPath.size - 1
 
         val moves = Direction.ALL.map { it * 2 }
-        println("Normal cost $normalCost")
-        val res = normalPath.map { p ->
+
+        val res = normalPath.sumOf { p ->
             moves.count { m -> normalPath.contains(p + m) && (costFromEnd[p]!! - 2 >= costFromEnd[p + m]!! + limit) }
-        }.sum()
+        }
 
         return res
     }
