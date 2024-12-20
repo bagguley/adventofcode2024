@@ -11,16 +11,12 @@ object Part1 {
     fun calc(input: List<String>, limit: Int): Int {
         val width = input[0].length
         val height = input.size
-        val map = BoundedMap(width, height, '#')
-        val walls = input.findChar('#')
+        val map = BoundedMap(width, height, '#').apply { setWalls(input.findChar('#')) }
         val start = input.findChar('S').first()
         val end = input.findChar('E').first()
 
-        walls.forEach { map[it] = '#' }
-
-        val costFromEnd = map.findAllCost(end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
-        val normalPath = map.findBestPath(start, end) { path -> Direction.ALL.map { Path(path.position + it, path.cost + 1) } }
-
+        val costFromEnd = map.findAllCost(end) { it.nextNESW() }
+        val normalPath = map.findBestPath(start, end) { it.nextNESW() }
         val moves = Direction.ALL.map { it * 2 }
 
         return normalPath.sumOf { p ->

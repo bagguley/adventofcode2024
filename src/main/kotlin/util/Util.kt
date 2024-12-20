@@ -54,9 +54,7 @@ enum class Direction(val x: Int, val y: Int) {
     }
 }
 
-fun Vec2.distanceTo(other: Vec2): Int {
-    return abs(x - other.x) + abs(y - other.y)
-}
+infix fun Vec2.distanceTo(other: Vec2): Int = abs(x - other.x) + abs(y - other.y)
 
 fun List<Vec2>.allPairs(): List<Pair<Vec2, Vec2>> = flatMap { p -> (this - p).map { n -> p to n } }
 
@@ -163,7 +161,7 @@ class BoundedMap<T>(private val width: Int, private val height: Int, private val
     }
 
     fun findBestPath(start: Vec2, end: Vec2, next: (Path) -> List<Path>): List<Vec2> {
-        val seen = mutableMapOf(start to listOf<Vec2>(start))
+        val seen = mutableMapOf(start to listOf(start))
         val queue = PriorityQueue<Path>().apply { add(Path(start, 0)) }
 
         while (queue.isNotEmpty()) {
@@ -192,8 +190,12 @@ class BoundedMap<T>(private val width: Int, private val height: Int, private val
 
         return seen
     }
+
+    fun setWalls(walls: List<Vec2>) = walls.forEach { this[it] = wall }
 }
 
 data class Path(val position: Vec2, val cost: Int): Comparable<Path> {
     override fun compareTo(other: Path): Int = cost.compareTo(other.cost)
 }
+
+fun Path.nextNESW(): List<Path> = Direction.ALL.map { Path(position + it, cost + 1) }
