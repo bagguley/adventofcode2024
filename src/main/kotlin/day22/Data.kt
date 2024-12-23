@@ -7,6 +7,13 @@ val testData = """
 2024
 """.trimIndent().split("\n")
 
+val testData2 = """
+1
+2
+3
+2024
+""".trimIndent().split("\n")
+
 val data = """
 2171043
 7290018
