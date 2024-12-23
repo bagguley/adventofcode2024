@@ -4,8 +4,8 @@ import util.*
 import util.Direction.*
 
 fun main() {
-    println(Part1.calc(testData.dropLast(4)))
-    //println(Part1.calc(data))
+    println(Part1.calc(testData))
+    println(Part1.calc(data))
 }
 
 object Part1 {
@@ -13,7 +13,6 @@ object Part1 {
         var sum = 0L
         for (code in input) {
             val shortest = shortest(2, code)
-            println("$shortest * $code")
             sum += shortest * code.dropLast(1).toLong()
         }
         return sum
@@ -24,7 +23,6 @@ object Part1 {
             (a, b) ->
             val paths = NumPad.paths(a, b)
             val shortest = paths.map { path -> KeyPad.shortestKeyPad(path, depth) }.min()
-            println(shortest)
             shortest
         }.sum()
     }
@@ -145,12 +143,11 @@ object Part1 {
                     shortestKeyPad(p, depth - 1)
                 }.min()
 
-                shortest[path to depth] = min
-
                 min
             }
 
             //println("$path $depth " + nextPaths.sum())
+            shortest[path to depth] = nextPaths.sum()
             return nextPaths.sum()
         }
     }
