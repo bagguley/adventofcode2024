@@ -32,7 +32,7 @@ object Part1 {
             val f = e.key
             for (v in e.value) {
                 for (p in map[v]!!) {
-                    if (!seen.contains(setOf(f,v,p)) && (f.startsWith('t' ) || v.startsWith('t') || p.startsWith('t'))) {
+                    if (setOf(f,v,p).let { !seen.contains(it) && it.any { it.startsWith('t' ) } } ) {
                         if (map[p]!!.contains(f)) {
                             count++
                             seen.add(setOf(f, v, p))
