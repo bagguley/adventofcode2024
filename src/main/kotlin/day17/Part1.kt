@@ -77,9 +77,7 @@ object Part1 {
     }
 
     fun load(input: List<String>): Pair<Registers, List<Int>> {
-        val a = input[0].substringAfter(": ").toLong()
-        val b = input[1].substringAfter(": ").toLong()
-        val c = input[2].substringAfter(": ").toLong()
+        val (a, b, c) = input.take(3).map { it.substringAfter(": ").toLong() }
         val program = input[4].substringAfter(": ").split(",").map { it.toInt() }
         return Registers(a, b, c) to program
     }
