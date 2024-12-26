@@ -76,4 +76,4 @@ data class Path(val position: Vec2, val cost: Int): Comparable<Path> {
     override fun compareTo(other: Path): Int = cost.compareTo(other.cost)
 }
 
-fun Path.nextNESW(): List<Path> = Direction.ALL.map { Path(position + it, cost + 1) }
+fun Path.nextNESW(): List<Path> = NESW.map { Path(position + it, cost + 1) }
