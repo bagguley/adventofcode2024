@@ -9,8 +9,7 @@ fun main() {
 
 object Part1 {
     fun calc(input: List<String>, limit: Int): Int {
-        val width = input[0].length
-        val height = input.size
+        val (width, height) = input.dimensions()
         val map = BoundedMap(width, height, '#').apply { setWalls(input.findChar('#')) }
         val start = input.findChar('S').first()
         val end = input.findChar('E').first()

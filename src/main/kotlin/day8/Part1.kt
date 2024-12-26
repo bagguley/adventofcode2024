@@ -17,7 +17,7 @@ object Part1 {
 
         val antinodes = combinations.flatMap { antinodes(it) }.toSet()
 
-        return antinodes.count { it.first in input.indices && it.second in 0..<input[0].length }
+        return antinodes.count { it.first in input.indices && it.second in 0..<input.width() }
     }
 
     private fun List<String>.combinations(char: Char): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> {
@@ -41,7 +41,7 @@ object Part1 {
 
 object Part1a {
     fun calc(input: List<String>): Int = input.flatMap{it.filter{it != '.'}.toSet()}.toSet().flatMap{
-        input.combinations(it)}.flatMap{anti(it)}.toSet().count{it.first in input.indices && it.second in 0..<input[0].length}
+        input.combinations(it)}.flatMap{anti(it)}.toSet().count{it.first in input.indices && it.second in 0..<input.width()}
 
     private fun List<String>.combinations(char: Char): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> = this.flatMapIndexed {
             y: Int, s: String -> s.mapIndexed{x: Int, c: Char -> x to c}.filter{it.second == char}.map{it.first to y}}
@@ -59,7 +59,7 @@ object Part1a {
 
 object Part1UsingUtil {
     fun calc(input: List<String>): Int = input.flatMap{it.filter{it != '.'}.toSet()}.toSet().flatMap{
-        input.combinations(it)}.flatMap{ anti(it) }.toSet().count{it.x in input.indices && it.y in 0..<input[0].length}
+        input.combinations(it)}.flatMap{ anti(it) }.toSet().count{it.x in input.indices && it.y in 0..<input.width()}
 
     private fun List<String>.combinations(char: Char): List<Pair<Vec2, Vec2>> = this.flatMapIndexed {
             y: Int, s: String -> s.mapIndexed{x: Int, c: Char -> x to c}.filter{it.second == char}.map{Vec2(it.first, y)}}

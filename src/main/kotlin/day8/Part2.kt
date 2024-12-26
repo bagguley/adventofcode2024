@@ -1,5 +1,7 @@
 package day8
 
+import util.*
+
 fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
@@ -8,14 +10,11 @@ fun main() {
 
 object Part2 {
     fun calc(input: List<String>): Int {
-        val height = input.size
-        val width = input[0].length
+        val (width, height) = input.dimensions()
         val uniqueLetters = input.flatMap { it.filter { it != '.' }.toSet() }.toSet()
 
         val combinations = uniqueLetters.flatMap { input.combinations(it) }
-
         val antinodes = combinations.flatMap { antinodes(it, width, height) }.toSet()
-
         val inside = antinodes.filter{ it.first in 0..<height && it.second in 0..<width}
 
         return inside.count()
@@ -53,8 +52,8 @@ object Part2 {
 
 object Part2a {
     fun calc(input: List<String>): Int = input.flatMap{it.filter{it != '.'}.toSet()}.toSet().flatMap{
-        input.combinations(it)}.flatMap{anti(it, input[0].length, input.size)}.toSet().count{it.first in input.indices &&
-            it.second in 0..<input[0].length}
+        input.combinations(it)}.flatMap{anti(it, input.width(), input.height())}.toSet().count{it.first in input.indices &&
+            it.second in 0..<input.width()}
 
     private fun List<String>.combinations(char: Char): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> = this.flatMapIndexed {
             y: Int, s: String -> s.mapIndexed{x: Int, c: Char -> x to c}.filter{it.second == char}.map{it.first to y}}

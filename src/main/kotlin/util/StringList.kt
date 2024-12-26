@@ -13,6 +13,11 @@ fun List<String>.setAt(position: Vec2, char: Char) =
 fun <T> List<String>.toVec2Map(transform: (Char) -> T): Map<Vec2, T> =
     this.flatMapIndexed { y, l -> l.mapIndexed { x, c -> Vec2(x, y) to (transform(c)) } }.associate { it }
 
+fun List<String>.dimensions(): Pair<Int, Int> = this[0].length to this.size
+
+fun List<String>.width(): Int = this[0].length
+fun List<String>.height(): Int = this.size
+
 fun List<String>.print() {
     for (y in indices) {
         val row = get(y)
