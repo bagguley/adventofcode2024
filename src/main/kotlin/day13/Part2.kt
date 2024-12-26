@@ -58,11 +58,7 @@ object Part2 {
 }
 
 object Part2UsingUtil {
-    fun calc(input: List<String>): BigInteger {
-        val games = load(input)
-
-        return games.sumOf { numTokensToWin(it) }
-    }
+    fun calc(input: List<String>): BigInteger = load(input).sumOf { numTokensToWin(it) }
 
     private fun load(input: List<String>): List<Game> {
         return input.map {
@@ -83,11 +79,8 @@ object Part2UsingUtil {
             A * game.buttonA.y + B * game.buttonB.y eq game.prize.y + offset
         }
 
-        if (simResult.first.remainder == BigInteger.ZERO && simResult.second.remainder == BigInteger.ZERO) {
-            return 3.toBigInteger() * simResult.first.quotient + simResult.second.quotient
-        }
-
-        return BigInteger.ZERO
+        return if (simResult.first.remainder == BigInteger.ZERO && simResult.second.remainder == BigInteger.ZERO) {
+            3.toBigInteger() * simResult.first.quotient + simResult.second.quotient } else BigInteger.ZERO
     }
 
     data class Game(val buttonA: Button, val buttonB: Button, val prize: Prize)
