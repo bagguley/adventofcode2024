@@ -37,17 +37,7 @@ object Part2 {
             }.joinToString("")
         }.toVec2Map{ it }.toMutableMap()
 
-        val moves = input[1].split("\n").flatMap {
-            it.map { c ->
-                when (c) {
-                    '^' -> NORTH
-                    '>' -> EAST
-                    'v' -> SOUTH
-                    '<' -> WEST
-                    else -> throw IllegalArgumentException("Bad move: $c")
-                }
-            }
-        }
+        val moves = input[1].split("\n").flatMap { it.map { c -> c.toDirection() } }
         return map to moves
     }
 
