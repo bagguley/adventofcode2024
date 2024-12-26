@@ -18,6 +18,8 @@ fun List<String>.dimensions(): Pair<Int, Int> = this[0].length to this.size
 fun List<String>.width(): Int = this[0].length
 fun List<String>.height(): Int = this.size
 
+fun List<String>.transpose(): List<String> = this.map { it.map { c -> "$c" } }.reduce { a, b -> a.zip(b) { c, d -> c + d } }
+
 fun List<String>.print() {
     for (y in indices) {
         val row = get(y)
