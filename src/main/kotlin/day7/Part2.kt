@@ -6,6 +6,7 @@ fun main() {
     println(Part2.calc(testData))
     println(Part2.calc(data))
     println(Part2a.calc(data))
+    println(Part2b.calc(data))
 }
 
 object Part2 {
@@ -24,4 +25,12 @@ object Part2a {
     private fun allEquations(target: BigInteger, head: BigInteger, list: List<BigInteger>): Boolean = if (head > target) false else
         if (list.isEmpty()) target == head else allEquations(target, head + list.first(), list.drop(1)) || allEquations(target, head * list.first(), list.drop(1)) ||
                 allEquations(target, "$head${list.first()}".toBigInteger(), list.drop(1))
+}
+
+object Part2b {
+    fun calc(input: List<String>): BigInteger = input.map { it.substringBefore(":").toBigInteger() to it.substringAfter(": ").split(" ").map { it.toBigInteger() } }
+        .filter { e -> DeepRecursiveFunction<Triple<BigInteger, BigInteger, List<BigInteger>>, Boolean> { (target, head, list) ->
+            if (head > target) false else if (list.isEmpty()) target == head else callRecursive(Triple(target, head + list.first(), list.drop(1))) ||
+                callRecursive(Triple(target, head * list.first(), list.drop(1))) || callRecursive(Triple(target, "$head${list.first()}".toBigInteger(), list.drop(1)))
+        }.invoke(Triple(e.first, e.second.first(), e.second.drop(1))) }.sumOf { it.first }
 }
