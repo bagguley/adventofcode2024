@@ -1,7 +1,6 @@
 package day15
 
 import util.*
-import util.Direction.*
 
 fun main() {
     println(Part1.calc(testData))
@@ -23,17 +22,7 @@ object Part1 {
 
     private fun load(input: List<String>): Pair<MutableMap<Vec2, Char>, List<Direction>> {
         val map = input[0].split("\n").toVec2Map{ it }.toMutableMap()
-        val moves = input[1].split("\n").flatMap {
-            it.map { c ->
-                when (c) {
-                    '^' -> NORTH
-                    '>' -> EAST
-                    'v' -> SOUTH
-                    '<' -> WEST
-                    else -> throw IllegalArgumentException("Bad move: $c")
-                }
-            }
-        }
+        val moves = input[1].split("\n").flatMap { it.map { c -> c.toDirection() } }
         return map to moves
     }
 
