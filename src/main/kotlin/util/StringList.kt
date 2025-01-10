@@ -20,6 +20,8 @@ fun List<String>.height(): Int = this.size
 
 fun List<String>.transpose(): List<String> = this.map { it.map { c -> "$c" } }.reduce { a, b -> a.zip(b) { c, d -> c + d } }
 
+fun List<String>.toBoundedMap(wall: Char) = BoundedMap(dimensions(), wall).apply { setWalls(findChar(wall)) }
+
 fun List<String>.print() {
     for (y in indices) {
         val row = get(y)

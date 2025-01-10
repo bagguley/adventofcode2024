@@ -15,6 +15,8 @@ class Counter {
 }
 
 class BoundedMap<T>(private val width: Int, private val height: Int, private val wall: T): LinkedHashMap<Vec2, T>() {
+    constructor(dimensions: Pair<Int, Int>, wall: T) : this(dimensions.first, dimensions.second, wall)
+
     override fun get(key: Vec2): T? {
         if (key.x !in 0..< width || key.y !in 0..< height) return wall
         return super.get(key)
