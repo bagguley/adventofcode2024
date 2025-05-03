@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.20"
 }
 
 group = "bagguley.aoc2024"
@@ -10,5 +10,5 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(23)
 }
